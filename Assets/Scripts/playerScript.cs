@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class playerScript : MonoBehaviour
 {
+    private double length;
     public float speed;
+    public GameObject tail;
+    public List<Vector2> headPositions = new List<Vector2>();
     private int direction;
     //1 = up
     //2 = down
@@ -13,6 +17,7 @@ public class playerScript : MonoBehaviour
     void Start()
     {
         direction = 0;
+        speed = 0.03f;
     }
 
     // Update is called once per frame
@@ -59,7 +64,11 @@ public class playerScript : MonoBehaviour
         {
             newPos.x = transform.position.x + speed * Time.deltaTime;
         }
-
         transform.position = newPos;
+    }
+
+    void move()
+    {
+        
     }
 }
