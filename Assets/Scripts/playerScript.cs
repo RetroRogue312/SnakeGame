@@ -48,7 +48,7 @@ public class playerScript : MonoBehaviour
         countBeforeEnemy = 10;
         countBeforeOrange = 5;
 
-        fruitIndex = Random.Range(0, fruits.Length - 1);
+        fruitIndex = Random.Range(0, fruits.Length);
         currentFruit = fruits[0];
         currentFruit.SetActive(true);
         
@@ -246,7 +246,7 @@ public class playerScript : MonoBehaviour
         turnPoints.Insert(0, point);
         if (segments.Count > 4)
         {
-            if (segments[4].TryGetComponent<BoxCollider2D>(out BoxCollider2D collider))
+            if (segments[1].TryGetComponent<BoxCollider2D>(out BoxCollider2D collider))
             {
                 collider.enabled = true;
                 print("Collider enabled on segment 4!");
@@ -260,10 +260,10 @@ public class playerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("fruit"))
         {
             fruitCount += 1;
-            int newIndex = Random.Range(0, fruits.Length - 1);
+            int newIndex = Random.Range(0, fruits.Length);
             
             while (newIndex == fruitIndex)
-                newIndex = Random.Range(0, fruits.Length - 1);
+                newIndex = Random.Range(0, fruits.Length);
             fruits[fruitIndex].SetActive(false);
             fruits[newIndex].SetActive(true);
             fruitIndex = newIndex;
