@@ -27,6 +27,8 @@ public class playerScript : MonoBehaviour
     private GameObject currentSegment;
     private List<GameObject> segments;
     
+    private float growthBuffer = 0.0f;
+    private float growthPerFruit = 1.0f;
     
     //1 = up
     //2 = down
@@ -81,6 +83,7 @@ public class playerScript : MonoBehaviour
         {
             direction = 1;
             gameStarted = true;
+            transform.eulerAngles = new Vector3(0,0,-90);
             addPoint();
             
         }
@@ -89,6 +92,7 @@ public class playerScript : MonoBehaviour
         {
             direction = 2;
             gameStarted = true;
+            transform.eulerAngles = new Vector3(0,0,90);
             addPoint();
            
             
@@ -98,6 +102,7 @@ public class playerScript : MonoBehaviour
         {
             direction = 3;
             gameStarted = true;
+            transform.eulerAngles = new Vector3(0,0,0);
             addPoint();
         }
         
@@ -105,6 +110,7 @@ public class playerScript : MonoBehaviour
         {
             direction = 4;
             gameStarted = true;
+            transform.eulerAngles = new Vector3(0,0,180);
             addPoint();
         }
         
@@ -132,6 +138,11 @@ public class playerScript : MonoBehaviour
     
     void moveTail()
     {
+
+
+        if (!gameStarted)
+            return;
+        
         GameObject target;
         if (turnPoints.Count > 0)
         {
@@ -141,9 +152,12 @@ public class playerScript : MonoBehaviour
         {
             target = gameObject;
         }
-        if (gameStarted)
-            tail.transform.position = Vector2.MoveTowards(tail.transform.position, target.transform.position, speed * Time.deltaTime);
-
+           
+        float step = speed * Time.deltaTime;
+        
+        if (growthBuffer > 0)
+        
+        
         if (target != gameObject && Vector2.Distance(tail.transform.position, target.transform.position) < 0.001f)
         {
             tail.transform.position = target.transform.position;
