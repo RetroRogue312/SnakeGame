@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bc56898b0354b72448e803c9c0a6ad80
+guid: c837dc1f438fc3040831a4efd8fb375e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1905862396976341853
-    second: eyes-dazed_0
+      213: -2703708324826562217
+    second: dazedEyes_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: eyes-dazed_0
+      name: dazedEyes_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 231
-        height: 118
+        width: 118
+        height: 231
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3ac53756f340d85e0800000000000000
-      internalID: -1905862396976341853
+      spriteID: 751427a7a9f7a7ad0800000000000000
+      internalID: -2703708324826562217
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      eyes-dazed_0: -1905862396976341853
+      dazedEyes_0: -2703708324826562217
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

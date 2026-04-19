@@ -4,15 +4,14 @@ using UnityEngine.InputSystem;
 
 public class playerScript : MonoBehaviour
 {
-    private double length;
     public float speed;
     
     private int direction;
     
     public int fruitCount;
-    public GameObject[] apples;
-    public GameObject[] oranges;
-    
+    public GameObject[] fruits;
+    private GameObject currentFruit;
+    private int fruitIndex;
     private int countBeforeSpeedUp;
     private int countBeforeEnemy;
     private int countBeforeOrange;
@@ -40,7 +39,7 @@ public class playerScript : MonoBehaviour
     void Start()
     {
         direction = 0;
-        speed = 1.5f;
+        speed = 2f;
         fruitCount = 0;
         gameStarted = false;
         turnPoints = new List<GameObject>();
@@ -48,7 +47,10 @@ public class playerScript : MonoBehaviour
         countBeforeSpeedUp = 5;
         countBeforeEnemy = 10;
         countBeforeOrange = 5;
-        
+
+        fruitIndex = Random.Range(0, fruits.Length - 1);
+        currentFruit = fruits[0];
+        currentFruit.SetActive(true);
         
 
         CreateSegment();
@@ -189,6 +191,11 @@ public class playerScript : MonoBehaviour
     void CreateSegment()
     {
         currentSegment = Instantiate(bodyPrefab);
+        
+        if (currentSegment.TryGetComponent<BoxCollider2D>(out BoxCollider2D collider))
+        {
+            collider.enabled = false; 
+        }
         segments.Insert(0, currentSegment);
     }
 
@@ -237,7 +244,14 @@ public class playerScript : MonoBehaviour
     {
         GameObject point = Instantiate(turnPointPrefab,transform.position,Quaternion.identity);
         turnPoints.Insert(0, point);
-        
+        if (segments.Count > 4)
+        {
+            if (segments[4].TryGetComponent<BoxCollider2D>(out BoxCollider2D collider))
+            {
+                collider.enabled = true;
+                print("Collider enabled on segment 4!");
+            }
+        }
         CreateSegment();
     }
 
@@ -246,9 +260,17 @@ public class playerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("fruit"))
         {
             fruitCount += 1;
+            int newIndex = Random.Range(0, fruits.Length - 1);
+            
+            while (newIndex == fruitIndex)
+                newIndex = Random.Range(0, fruits.Length - 1);
+            fruits[fruitIndex].SetActive(false);
+            fruits[newIndex].SetActive(true);
+            fruitIndex = newIndex;
+            
+            
             print("fruit count: " + fruitCount);
             growthBuffer += growthPerFruit;
-            collision.gameObject.SetActive(false);
             countBeforeEnemy--;
             countBeforeOrange--;
             countBeforeSpeedUp--;
