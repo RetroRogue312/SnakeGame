@@ -13,7 +13,6 @@ public class playerScript : MonoBehaviour
     public GameObject[] apples;
     public GameObject[] oranges;
     
-    
     private int countBeforeSpeedUp;
     private int countBeforeEnemy;
     private int countBeforeOrange;
@@ -29,6 +28,9 @@ public class playerScript : MonoBehaviour
     
     private float growthBuffer = 0.0f;
     private float growthPerFruit = 1.0f;
+    
+    public AudioSource[] KeySounds = new AudioSource[4];
+    public AudioSource deathSound;
     
     //1 = up
     //2 = down
@@ -79,38 +81,42 @@ public class playerScript : MonoBehaviour
     void moveHead()
     {
         Vector2 newPos = transform.position;
-        if ((Keyboard.current.upArrowKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame) && direction != 2)
+        if ((Keyboard.current.upArrowKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame) && direction != 2 && direction != 1)
         {
             direction = 1;
             gameStarted = true;
             transform.eulerAngles = new Vector3(0,0,-90);
+            KeySounds[0].Play();
             addPoint();
             
         }
 
-        if ((Keyboard.current.downArrowKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame) && direction != 1)
+        if ((Keyboard.current.downArrowKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame) && direction != 1 && direction != 2)
         {
             direction = 2;
             gameStarted = true;
             transform.eulerAngles = new Vector3(0,0,90);
+            KeySounds[1].Play();
             addPoint();
            
             
         }
 
-        if ((Keyboard.current.leftArrowKey.wasPressedThisFrame || Keyboard.current.aKey.wasPressedThisFrame) && direction != 4)
+        if ((Keyboard.current.leftArrowKey.wasPressedThisFrame || Keyboard.current.aKey.wasPressedThisFrame) && direction != 4 && direction != 3)
         {
             direction = 3;
             gameStarted = true;
             transform.eulerAngles = new Vector3(0,0,0);
+            KeySounds[2].Play();
             addPoint();
         }
         
-        if ((Keyboard.current.rightArrowKey.wasPressedThisFrame || Keyboard.current.dKey.wasPressedThisFrame) && direction != 3)
+        if ((Keyboard.current.rightArrowKey.wasPressedThisFrame || Keyboard.current.dKey.wasPressedThisFrame) && direction != 3 && direction != 4)
         {
             direction = 4;
             gameStarted = true;
             transform.eulerAngles = new Vector3(0,0,180);
+            KeySounds[3].Play();
             addPoint();
         }
         
@@ -154,21 +160,28 @@ public class playerScript : MonoBehaviour
         }
            
         float step = speed * Time.deltaTime;
-        
-        if (growthBuffer > 0)
-        
-        
-        if (target != gameObject && Vector2.Distance(tail.transform.position, target.transform.position) < 0.001f)
-        {
-            tail.transform.position = target.transform.position;
-            turnPoints.Remove(target);
-            Destroy(target);
 
-            if (segments.Count > 1)
+        if (growthBuffer > 0)
+        {
+            growthBuffer -= step;
+            if (growthBuffer < 0)
+                growthBuffer = 0;
+        }
+        else
+        {
+            tail.transform.position = Vector2.MoveTowards(tail.transform.position, target.transform.position, speed * Time.deltaTime);
+            if (target != gameObject && Vector2.Distance(tail.transform.position, target.transform.position) < 0.001f)
             {
-                GameObject oldSegment = segments[segments.Count - 1];
-                segments.Remove(oldSegment);
-                Destroy(oldSegment);
+                tail.transform.position = target.transform.position;
+                turnPoints.Remove(target);
+                Destroy(target);
+
+                if (segments.Count > 1)
+                {
+                    GameObject oldSegment = segments[segments.Count - 1];
+                    segments.Remove(oldSegment);
+                    Destroy(oldSegment);
+                }
             }
         }
     }
@@ -228,12 +241,13 @@ public class playerScript : MonoBehaviour
         CreateSegment();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("fruit"))
         {
             fruitCount += 1;
             print("fruit count: " + fruitCount);
+            growthBuffer += growthPerFruit;
             collision.gameObject.SetActive(false);
             countBeforeEnemy--;
             countBeforeOrange--;
@@ -243,8 +257,10 @@ public class playerScript : MonoBehaviour
 
         if (collision.gameObject.CompareTag("obstacle"))
         {
+            deathSound.Play();
             speed = 0.0f;
             print("Game over");
+            gameStarted = false;
         }
     }
 }
