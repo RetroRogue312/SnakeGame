@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class playerScript : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class playerScript : MonoBehaviour
     
     public TMP_Text scoreText;
     public TMP_Text bestText;
+    public TMP_Text bestTextS;
+    public TMP_Text scoreTextS;
     
     public GameObject[] fruits;
     public GameObject currentFruit;
@@ -46,6 +49,7 @@ public class playerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        InputSystem.DisableDevice(Keyboard.current);
         direction = 0;
         speed = 2f;
         score = 0;
@@ -313,7 +317,14 @@ public class playerScript : MonoBehaviour
             deathSound.Play();
             speed = 0.0f;
             print("Game over");
-            gameStarted = false;
+            InputSystem.DisableDevice(Keyboard.current);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
+    public void OnPlay()
+    {
+        InputSystem.EnableDevice(Keyboard.current);
+    }
+    
 }
