@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,9 @@ public class playerScript : MonoBehaviour
     
     public int score;
     public int bestScore;
+    
+    public TMP_Text scoreText;
+    public TMP_Text bestText;
     
     public GameObject[] fruits;
     public GameObject currentFruit;
@@ -45,6 +49,7 @@ public class playerScript : MonoBehaviour
         direction = 0;
         speed = 2f;
         score = 0;
+        bestScore = score;
         gameStarted = false;
         turnPoints = new List<GameObject>();
         segments = new List<GameObject>();
@@ -267,6 +272,13 @@ public class playerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("fruit"))
         {
             score += 1;
+            scoreText.SetText(score.ToString());
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestText.SetText(score.ToString());
+            }
+            
             
             
             if (collision.transform.parent != null && collision.transform.parent.CompareTag("trap"))
