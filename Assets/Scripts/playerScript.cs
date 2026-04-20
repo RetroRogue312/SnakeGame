@@ -53,7 +53,7 @@ public class playerScript : MonoBehaviour
         direction = 0;
         speed = 2f;
         score = 0;
-        bestScore = score;
+        bestScore = ScoreHolder.instance.best;
         gameStarted = false;
         turnPoints = new List<GameObject>();
         segments = new List<GameObject>();
@@ -64,7 +64,9 @@ public class playerScript : MonoBehaviour
         fruitIndex = Random.Range(0, fruits.Length);
         currentFruit = fruits[fruitIndex];
         currentFruit.SetActive(true);
-        
+        bestTextS.SetText(ScoreHolder.instance.best.ToString());
+        scoreTextS.SetText(ScoreHolder.instance.score.ToString());
+        bestText.SetText(ScoreHolder.instance.best.ToString());
 
         CreateSegment();
         stretchCurrentSegment();
@@ -318,6 +320,8 @@ public class playerScript : MonoBehaviour
             speed = 0.0f;
             print("Game over");
             InputSystem.DisableDevice(Keyboard.current);
+            ScoreHolder.instance.score = score;
+            ScoreHolder.instance.best = bestScore;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
