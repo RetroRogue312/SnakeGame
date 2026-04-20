@@ -8,7 +8,9 @@ public class playerScript : MonoBehaviour
     
     private int direction;
     
-    public int fruitCount;
+    public int score;
+    public int bestScore;
+    
     public GameObject[] fruits;
     public GameObject currentFruit;
     public int fruitIndex;
@@ -42,7 +44,7 @@ public class playerScript : MonoBehaviour
     {
         direction = 0;
         speed = 2f;
-        fruitCount = 0;
+        score = 0;
         gameStarted = false;
         turnPoints = new List<GameObject>();
         segments = new List<GameObject>();
@@ -264,7 +266,8 @@ public class playerScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("fruit"))
         {
-            fruitCount += 1;
+            score += 1;
+            
             
             if (collision.transform.parent != null && collision.transform.parent.CompareTag("trap"))
             {
@@ -285,7 +288,7 @@ public class playerScript : MonoBehaviour
             currentFruit.SetActive(true);
             
             
-            print("fruit count: " + fruitCount);
+            print("fruit count: " + score);
             growthBuffer += growthPerFruit;
             countBeforeEnemy--;
             countBeforeOrange--;
